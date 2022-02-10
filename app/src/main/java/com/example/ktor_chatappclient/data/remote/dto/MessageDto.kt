@@ -21,6 +21,7 @@ data class MessageDto(
             text = text,
             formattedTime = formattedDate,
             username = username
+
         )
     }
 }
