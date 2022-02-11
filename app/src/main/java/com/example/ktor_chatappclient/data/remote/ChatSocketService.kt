@@ -6,9 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ChatSocketService {
 
-    suspend fun initSession(
-        username: String
-    ): Resource<Unit>
+    suspend fun initSession(username: String): Resource<Unit>
 
     suspend fun sendMessage(message: String)
 
@@ -21,6 +19,6 @@ interface ChatSocketService {
     }
 
     sealed class Endpoints(val url: String) {
-        object ChatSocket: Endpoints("$BASE_URL/chat-socket")
+        object ChatSocket : Endpoints("$BASE_URL/chat-socket")
     }
 }
