@@ -39,10 +39,11 @@ class ChatViewModel @Inject constructor(
                 val result = chatSocketService.initSession(username)
                 when (result) {
                     is Resource.Success -> {
+                        // if its a success, we need to look out for new messages from our backend
                         chatSocketService.observeMessages()
                             .onEach { message ->
                                 val newList = state.value.messages.toMutableList().apply {
-                                    add(0, message)
+                                    add(0, message) // Here we are adding every new message at index 0 and pushing the rest up
                                 }
                                 _state.value = state.value.copy(messages = newList)
                             }.launchIn(viewModelScope)
