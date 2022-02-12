@@ -69,7 +69,7 @@ class ChatViewModel @Inject constructor(
     }
 
     fun sendMessage() {
-        viewModelScope.launch {
+        viewModelScope.launch { // Validation best done in a usecase
             if (messageText.value.isNotBlank()) {
                 chatSocketService.sendMessage(messageText.value)
             }
@@ -79,6 +79,9 @@ class ChatViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         disconnect()
+    }
+    fun onMessageChange(message: String) {
+        _messageText.value = message
     }
 
     fun disconnect() {
