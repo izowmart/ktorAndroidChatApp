@@ -3,7 +3,7 @@
 1. MVVM Architecture.
 2. Jetpack Compose UI.
 3. Dagger Hilt Depedency Injection.
-4. Retrofit Api.
-5. Backend services built in ktor
-6. Networking using ktor client
-7. Chat Websockets
+4. Networking using ktor client.
+5. Backend services built in ktor.
+6. Chat Websockets.
+
