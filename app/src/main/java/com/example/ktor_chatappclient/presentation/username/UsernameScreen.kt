@@ -20,7 +20,7 @@ fun UsernameScreen(
 ) {
     LaunchedEffect(key1 = true) {
         viewModel.onJoinChat.collectLatest { username ->
-            onNavigate(username)
+            onNavigate("chat_screen/$username")
         }
     }
     Box(

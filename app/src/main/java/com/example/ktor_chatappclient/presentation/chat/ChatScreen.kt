@@ -62,91 +62,94 @@ fun ChatScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-    )
-    {
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-            reverseLayout = true
-        ) {
-            item {
-                Spacer(modifier = Modifier.height(32.dp))
-            }
+            .padding(16.dp), content = {
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                reverseLayout = true
+            ) {
+                item {
+                    Spacer(modifier = Modifier.height(32.dp))
+                }
 
-            items(state.messages) { message ->
-                val isOwnMessage = message.username == username
-                Box(
-                    contentAlignment = if (isOwnMessage) {
-                        Alignment.CenterEnd
-                    } else Alignment.CenterStart, modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(modifier = Modifier
-                        .width(200.dp)
-                        .drawBehind {
-                            val cornerRadius = 10.dp.toPx()
-                            val triangleHeight = 20.dp.toPx()
-                            val triangleWidth = 25.dp.toPx()
-                            val trianglePath = Path().apply {
-                                if (isOwnMessage) {
-                                    moveTo(size.width, size.height - cornerRadius)
-                                    lineTo(size.width, size.height + triangleHeight)
-                                    lineTo(
-                                        size.width - triangleWidth,
-                                        size.height - cornerRadius
-                                    )
-                                    close()
-                                } else {
-                                    moveTo(0f, size.height - cornerRadius)
-                                    lineTo(0f, size.height + triangleHeight)
-                                    lineTo(triangleWidth, size.height - cornerRadius)
-                                    close()
+                items(state.messages) { message ->
+                    val isOwnMessage = message.username == username
+                    Box(
+                        contentAlignment = if (isOwnMessage) {
+                            Alignment.CenterEnd
+                        } else Alignment.CenterStart, modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(modifier = Modifier
+                            .width(200.dp)
+                            .drawBehind {
+                                val cornerRadius = 10.dp.toPx()
+                                val triangleHeight = 20.dp.toPx()
+                                val triangleWidth = 25.dp.toPx()
+                                val trianglePath = Path().apply {
+                                    if (isOwnMessage) {
+                                        moveTo(size.width, size.height - cornerRadius)
+                                        lineTo(size.width, size.height + triangleHeight)
+                                        lineTo(
+                                            size.width - triangleWidth,
+                                            size.height - cornerRadius
+                                        )
+                                        close()
+                                    } else {
+                                        moveTo(0f, size.height - cornerRadius)
+                                        lineTo(0f, size.height + triangleHeight)
+                                        lineTo(triangleWidth, size.height - cornerRadius)
+                                        close()
+                                    }
                                 }
+                                drawPath(
+                                    path = trianglePath,
+                                    color = if (isOwnMessage) Color.Green else Color.DarkGray
+                                )
                             }
-                            drawPath(
-                                path = trianglePath,
-                                color = if (isOwnMessage) Color.Green else Color.DarkGray
+                            .background(
+                                color = if (isOwnMessage) Color.Green else Color.DarkGray,
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .padding(8.dp)
+                        ) {
+
+                            Text(
+                                text = message.username,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                            Text(
+                                text = message.text,
+                                color = Color.White
+                            )
+                            Text(
+                                text = message.formattedTime,
+                                color = Color.White,
+                                modifier = Modifier.align(Alignment.End)
                             )
                         }
-                        .background(
-                            color = if (isOwnMessage) Color.Green else Color.DarkGray,
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                        .padding(8.dp)
-                    ) {
-
-                        Text(
-                            text = message.username,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
-                        Text(
-                            text = message.text,
-                            color = Color.White
-                        )
-                        Text(
-                            text = message.formattedTime,
-                            color = Color.White,
-                            modifier = Modifier.align(Alignment.End)
-                        )
                     }
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
-                Spacer(modifier = Modifier.height(32.dp))
+            }
+            Row(modifier = Modifier.fillMaxWidth()) {
+                TextField(
+                    value = viewModel.messageText.value,
+                    onValueChange = viewModel::onMessageChange,
+                    placeholder = {
+                        Text(text = "Enter a message")
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(onClick = viewModel::sendMessage) {
+                    Icon(
+                        imageVector = Icons.Default.Send,
+                        contentDescription = "Send"
+                    )
+                }
+
             }
         }
-        Row(modifier = Modifier.fillMaxWidth()) {
-            TextField(
-                value = viewModel.messageText.value,
-                onValueChange = viewModel::onMessageChange,
-                placeholder = {
-                    Text(text = "Enter a message")
-                },
-                modifier = Modifier.weight(1f)
-            )
-            IconButton(onClick = { viewModel::sendMessage }) {
-                Icon(imageVector = Icons.Default.Send, contentDescription = "Send")
-            }
-        }
-    }
+    )
 }
